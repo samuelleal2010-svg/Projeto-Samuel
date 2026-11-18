@@ -1,20 +1,4 @@
 <!DOCTYPE html>
-<html>
-
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JSFiddle y3acswdj</title>
-
-  <style>
-    
-  </style>
-
-  
-</head>
-<body>
-  <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -22,11 +6,17 @@
     <title>Jogo dos Pontos</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background: #17172e;
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 20px;
         }
 
         h1 {
@@ -54,6 +44,7 @@
             position: absolute;
             cursor: pointer;
             display: none;
+            box-shadow: 0 0 15px #ff3366;
         }
 
         button {
@@ -64,6 +55,12 @@
             font-size: 18px;
             border-radius: 10px;
             cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: white;
+            transform: scale(1.05);
         }
 
         #mensagem {
@@ -81,7 +78,7 @@
     <h3>Tempo: ∞ Infinito</h3>
     <h3>Dificuldade: <span id="dificuldade">Normal</span></h3>
 
-    <button onclick="iniciar()">Começar jogo</button>
+    <button id="botaoIniciar">Começar jogo</button>
 
     <div id="jogo">
         <div id="alvo"></div>
@@ -93,7 +90,6 @@
         let pontos = 0;
         let vidas = 3;
         let jogando = false;
-
         let inicio;
         let cronometroAlvo;
 
@@ -153,19 +149,16 @@
 
             clearTimeout(cronometroAlvo);
 
-            let x = Math.random() * (jogo.clientWidth - 50);
-            let y = Math.random() * (jogo.clientHeight - 50);
+            const x = Math.random() * (jogo.clientWidth - 50);
+            const y = Math.random() * (jogo.clientHeight - 50);
 
             alvo.style.left = x + "px";
             alvo.style.top = y + "px";
             alvo.style.display = "block";
 
-            // A cada minuto, o alvo fica mais rápido
-            let minutos = Math.floor((Date.now() - inicio) / 60000);
+            const minutos = Math.floor((Date.now() - inicio) / 60000);
 
-            // Começa com 2,5 segundos e diminui 0,3 segundo por minuto
-            // O limite mínimo é 0,5 segundo
-            let duracao = Math.max(500, 2500 - minutos * 300);
+            const duracao = Math.max(500, 2500 - minutos * 300);
 
             if (minutos === 0) {
                 document.getElementById("dificuldade").textContent = "Normal";
@@ -187,7 +180,6 @@
                 } else {
                     moverAlvo();
                 }
-
             }, duracao);
         }
 
@@ -213,13 +205,8 @@
             }
         });
 
+        document.getElementById("botaoIniciar").addEventListener("click", iniciar);
     </script>
 
-</body>
-</html>
-
-  <script>
-    
-  </script>
 </body>
 </html>
