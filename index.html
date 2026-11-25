@@ -3,210 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo dos Pontos</title>
-
+    <meta name="theme-color" content="#f4f1fb">
+    <title>Gráfico de Vendas da Empresa</title>
     <style>
         * {
             box-sizing: border-box;
         }
 
         body {
-            background: #17172e;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 24px;
+            background: #f4f1fb;
+            color: #29213b;
+            font-family: Arial, sans-serif;
+        }
+
+        .painel {
+            width: min(900px, 100%);
+            padding: 30px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(48, 25, 80, .12);
         }
 
         h1 {
-            color: #00e5ff;
+            margin: 0 0 8px;
+            color: #592c91;
+            text-align: center;
         }
 
-        #jogo {
-            width: 90%;
-            max-width: 600px;
-            height: 350px;
-            background: #29294d;
-            margin: 20px auto;
+        .subtitulo {
+            margin: 0 0 28px;
+            color: #766b83;
+            text-align: center;
+        }
+
+        .grafico {
             position: relative;
-            border: 3px solid #00e5ff;
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: crosshair;
+            display: flex;
+            align-items: end;
+            gap: clamp(10px, 3vw, 28px);
+            height: 390px;
+            padding: 20px 15px 42px 58px;
+            border-bottom: 2px solid #766b83;
+            border-left: 2px solid #766b83;
+            background: repeating-linear-gradient(
+                to top,
+                transparent 0,
+                transparent 74px,
+                #eee9f5 75px,
+                #eee9f5 76px
+            );
         }
 
-        #alvo {
-            width: 50px;
-            height: 50px;
-            background: #ff3366;
-            border-radius: 50%;
+        .eixo-y {
             position: absolute;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 0 15px #ff3366;
+            top: 50%;
+            left: -52px;
+            color: #62566f;
+            font-weight: bold;
+            writing-mode: vertical-rl;
+            transform: translateY(-50%) rotate(180deg);
         }
 
-        button {
-            background: #00e5ff;
-            color: #17172e;
-            border: none;
-            padding: 12px 25px;
-            font-size: 18px;
-            border-radius: 10px;
-            cursor: pointer;
+        .coluna {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: end;
+            gap: 8px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .valor {
+            color: #4c2878;
+            font-size: clamp(12px, 2vw, 16px);
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .barra {
+            width: min(100%, 105px);
+            height: var(--altura);
+            min-height: 8px;
+            border-radius: 10px 10px 0 0;
+            background: linear-gradient(180deg, #bd8bf2, #743bb4);
+            transition: filter .2s, transform .2s;
+        }
+
+        .barra:hover {
+            filter: brightness(1.08);
+            transform: scaleY(1.03);
+            transform-origin: bottom;
+        }
+
+        .mes {
+            position: absolute;
+            bottom: -30px;
+            color: #51445f;
             font-weight: bold;
         }
 
-        button:hover {
-            background: white;
-            transform: scale(1.05);
+        .legenda {
+            margin-top: 55px;
+            color: #6f637b;
+            text-align: center;
         }
 
-        #mensagem {
-            color: #00e5ff;
+        .resumo {
+            margin-top: 22px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f5effd;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        @media (max-width: 520px) {
+            .painel {
+                padding: 22px 16px;
+            }
+
+            .grafico {
+                height: 320px;
+                gap: 8px;
+                padding-left: 42px;
+            }
+
+            .eixo-y {
+                left: -38px;
+                font-size: 12px;
+            }
+
+            .mes {
+                font-size: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
         }
     </style>
 </head>
-
 <body>
+    <main class="painel">
+        <h1>Vendas da Empresa</h1>
+        <p class="subtitulo">Desempenho mensal — valores fictícios</p>
 
-    <h1>🎮 Jogo dos Pontos</h1>
+        <section class="grafico" aria-label="Gráfico de barras das vendas mensais">
+            <span class="eixo-y">Vendas (R$ mil)</span>
 
-    <h2>Pontos: <span id="pontos">0</span></h2>
-    <h2>❤️ Vidas: <span id="vidas">3</span></h2>
-    <h3>Tempo: ∞ Infinito</h3>
-    <h3>Dificuldade: <span id="dificuldade">Normal</span></h3>
+            <div class="coluna">
+                <span class="valor">R$ 20 mil</span>
+                <div class="barra" style="--altura: 40%" title="Janeiro: R$ 20 mil"></div>
+                <span class="mes">Jan</span>
+            </div>
+            <div class="coluna">
+                <span class="valor">R$ 25 mil</span>
+                <div class="barra" style="--altura: 50%" title="Fevereiro: R$ 25 mil"></div>
+                <span class="mes">Fev</span>
+            </div>
+            <div class="coluna">
+                <span class="valor">R$ 30 mil</span>
+                <div class="barra" style="--altura: 60%" title="Março: R$ 30 mil"></div>
+                <span class="mes">Mar</span>
+            </div>
+            <div class="coluna">
+                <span class="valor">R$ 35 mil</span>
+                <div class="barra" style="--altura: 70%" title="Abril: R$ 35 mil"></div>
+                <span class="mes">Abr</span>
+            </div>
+            <div class="coluna">
+                <span class="valor">R$ 40 mil</span>
+                <div class="barra" style="--altura: 80%" title="Maio: R$ 40 mil"></div>
+                <span class="mes">Mai</span>
+            </div>
+        </section>
 
-    <button id="botaoIniciar">Começar jogo</button>
-
-    <div id="jogo">
-        <div id="alvo"></div>
-    </div>
-
-    <h2 id="mensagem">Clique em começar!</h2>
-
-    <script>
-        let pontos = 0;
-        let vidas = 3;
-        let jogando = false;
-        let inicio;
-        let cronometroAlvo;
-
-        const alvo = document.getElementById("alvo");
-        const jogo = document.getElementById("jogo");
-
-        function iniciar() {
-            clearTimeout(cronometroAlvo);
-
-            pontos = 0;
-            vidas = 3;
-            jogando = true;
-
-            inicio = Date.now();
-
-            document.getElementById("pontos").textContent = pontos;
-            document.getElementById("vidas").textContent = vidas;
-            document.getElementById("dificuldade").textContent = "Normal";
-            document.getElementById("mensagem").textContent =
-                "Boa sorte! Acerte os alvos!";
-
-            alvo.style.display = "block";
-
-            moverAlvo();
-        }
-
-        function acertar() {
-            if (!jogando) return;
-
-            clearTimeout(cronometroAlvo);
-
-            pontos++;
-
-            document.getElementById("pontos").textContent = pontos;
-
-            moverAlvo();
-        }
-
-        function errar() {
-            if (!jogando) return;
-
-            clearTimeout(cronometroAlvo);
-
-            vidas--;
-
-            document.getElementById("vidas").textContent = vidas;
-
-            if (vidas <= 0) {
-                fimDeJogo();
-            } else {
-                moverAlvo();
-            }
-        }
-
-        function moverAlvo() {
-            if (!jogando) return;
-
-            clearTimeout(cronometroAlvo);
-
-            const x = Math.random() * (jogo.clientWidth - 50);
-            const y = Math.random() * (jogo.clientHeight - 50);
-
-            alvo.style.left = x + "px";
-            alvo.style.top = y + "px";
-            alvo.style.display = "block";
-
-            const minutos = Math.floor((Date.now() - inicio) / 60000);
-
-            const duracao = Math.max(500, 2500 - minutos * 300);
-
-            if (minutos === 0) {
-                document.getElementById("dificuldade").textContent = "Normal";
-            } else if (minutos < 3) {
-                document.getElementById("dificuldade").textContent = "Difícil";
-            } else {
-                document.getElementById("dificuldade").textContent = "Extrema";
-            }
-
-            cronometroAlvo = setTimeout(() => {
-                if (!jogando) return;
-
-                vidas--;
-
-                document.getElementById("vidas").textContent = vidas;
-
-                if (vidas <= 0) {
-                    fimDeJogo();
-                } else {
-                    moverAlvo();
-                }
-            }, duracao);
-        }
-
-        function fimDeJogo() {
-            jogando = false;
-
-            clearTimeout(cronometroAlvo);
-
-            alvo.style.display = "none";
-
-            document.getElementById("mensagem").textContent =
-                "💀 GAME OVER! Você fez " + pontos + " pontos!";
-        }
-
-        alvo.addEventListener("click", function(event) {
-            event.stopPropagation();
-            acertar();
-        });
-
-        jogo.addEventListener("click", function(event) {
-            if (event.target !== alvo) {
-                errar();
-            }
-        });
-
-        document.getElementById("botaoIniciar").addEventListener("click", iniciar);
-    </script>
-
+        <p class="legenda">■ Vendas mensais</p>
+        <div class="resumo">
+            <strong>Resumo:</strong> as vendas cresceram de R$ 20 mil em janeiro
+            para R$ 40 mil em maio, um aumento de 100% no período.
+        </div>
+    </main>
 </body>
 </html>
